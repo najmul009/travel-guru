@@ -3,7 +3,16 @@ import { Button, Container, Form, FormControl, Nav, Navbar } from 'react-bootstr
 import { Link } from 'react-router-dom';
 import './Header.css'
 import logo from '../../images/logo.png'
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from '../../firebase.init';
+import { signOut } from 'firebase/auth';
 const Header = () => {
+    const [user] = useAuthState(auth)
+    const handelSignOut = () =>{
+        signOut(auth)
+    }
+
+
     return (
         <Navbar bg="light" expand="lg">
             <Container className='d-flex justify-content-between fs-4 fw-normal' >
@@ -32,7 +41,16 @@ const Header = () => {
                         <Nav.Link as={Link} to='/'>Destination</Nav.Link>
                         <Nav.Link as={Link} to='/'>BLog</Nav.Link>
                         <Nav.Link as={Link} to='/'>Contact</Nav.Link>
-                        <Nav.Link as={Link} to='/signup'>SignUp</Nav.Link>
+                        <Nav.Link as={Link} to='/'>{user?.displayName}</Nav.Link>
+                        
+
+                        {
+                            user?
+                             <button onClick={handelSignOut}>Log Out</button>
+                             :
+                             <Nav.Link as={Link} to='/signup'>SignUp</Nav.Link>
+
+                        }
                        
                     </Nav>
                     
